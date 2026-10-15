@@ -1,0 +1,20 @@
+services:
+  tape-deck-server:
+    image: ghcr.io/andybateman/tape-deck-server:latest
+    container_name: tape-deck-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /path/to/your/music:/music:ro   # Artist/Album/tracks
+      - tape-state:/state               # tag cache, covers, favourites
+    environment:
+      TAPE_PASSWORD: ${TAPE_PASSWORD:-}               # put it in a .env file beside this one
+      TAPE_GUEST_PASSWORD: ${TAPE_GUEST_PASSWORD:-}   # optional: friends play, your favourites stay yours
+      # Everyone is asked for the password in Docker: published ports can hide who's calling.
+      # With network_mode: host instead of ports, your own network can skip it:
+      # TAPE_HOME_NETWORKS: "private"
+      # TAPE_RESCAN_MINUTES: "15"
+
+volumes:
+  tape-state:

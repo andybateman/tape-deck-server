@@ -6,7 +6,7 @@
 **Start Date:** 2026-10-15
 **Last Updated:** 2026-10-15
 **Context:** @personal
-**Repository:** https://github.com/andybateman/tape-deck-server (public, not yet created)
+**Repository:** https://github.com/andybateman/tape-deck-server (public)
 -->
 
 ## Overview
@@ -35,9 +35,8 @@ The public README, what people read on GitHub, is [.github/README.md](.github/RE
 
 ## Next Steps
 
-1. Andy to confirm, then create the public GitHub repository and push.
-2. Tag `v1.0.0` for the first image and release, and make the GHCR package public.
-3. Link it from the app's help and the website's Tape Deck pages, and from the TestFlight notes.
+1. Check the GHCR package is public, so `docker pull` works without signing in.
+2. Link it from the app's help and the website's Tape Deck pages, and from the TestFlight notes.
 
 ## Known Issues
 

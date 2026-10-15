@@ -39,7 +39,7 @@ jobs:
           docker logs tds-open
       - name: Asks for the password through a published port
         run: |
-          docker run -d --name tds-password -p 8081:8080 -e TAPE_PASSWORD=secret tape-deck-server
+          docker run -d --name tds-password -p 8081:8080 -v "$PWD/music:/music:ro" -e TAPE_PASSWORD=secret tape-deck-server
           for i in $(seq 30); do curl -fs -o login.html http://127.0.0.1:8081/library.html && break; sleep 1; done
           grep -q 'action="/login"' login.html
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8081/favs)" = 401

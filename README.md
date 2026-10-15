@@ -35,10 +35,11 @@ The public README, what people read on GitHub, is [.github/README.md](.github/RE
 
 ## Next Steps
 
-1. Check the GHCR package is public, so `docker pull` works without signing in.
-2. Link it from the app's help and the website's Tape Deck pages, and from the TestFlight notes.
+1. Link it from the app's help and the website's Tape Deck pages, and from the TestFlight notes.
 
 ## Known Issues
+
+- The Docker actions in `release.yml` (`docker/*-action`) still run on Node 20, which GitHub warns about (as at 2026-10-15); a newer major of each when they're out.
 
 - The app's page keeps favourites in step through `/favs`, which a guest is refused; the app's iCloud carries a guest's between their own devices instead.
 - Not tried against a library of real size yet (as at 2026-10-15): the first scan reads every file's tags, and the catalogue answers 503 until it's done.

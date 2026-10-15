@@ -20,6 +20,7 @@ import urllib.error
 import urllib.request
 import wave
 from pathlib import Path
+from typing import ClassVar
 
 SERVER = Path(__file__).resolve().parent.parent / "tape_deck_server.py"
 try:
@@ -81,9 +82,8 @@ class Running:
                                      stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         for _ in range(100):   # up, and the first scan done
             try:
-                if self.get("/library.html", Forwarded="for=127.0.0.1")[0] != 503 or env.get("TAPE_PASSWORD"):
-                    if self.get("/health")[0] == 200:
-                        break
+                if self.get("/health")[0] == 200 and (env.get("TAPE_PASSWORD") or self.get("/library.html")[0] != 503):
+                    break
             except OSError:
                 pass
             time.sleep(0.1)
@@ -113,11 +113,11 @@ def embedded(marker: str, html: str):
     """As the app reads the catalogue: the JSON after the marker, to the end of its line, less the semicolon."""
     rest = html[html.index(marker) + len(marker):]
     line = rest.split("\n", 1)[0]
-    return json.loads(line[:-1] if line.endswith(";") else line)
+    return json.loads(line.removesuffix(";"))
 
 
 class Base(unittest.TestCase):
-    env: dict = {}
+    env: ClassVar[dict] = {}
 
     @classmethod
     def setUpClass(cls):
@@ -219,8 +219,8 @@ Open.env = {"TAPE_RESCAN_MINUTES": "0.02"}
 
 class Password(Base):
     """The owner's password and a guest's: home callers skip both; the owner has the favourites, a guest doesn't."""
-    env = {"TAPE_PASSWORD": "sesame", "TAPE_GUEST_PASSWORD": "visitor"}
-    outside = {"X_Forwarded_For": "203.0.113.9"}   # through a proxy: never placed by address
+    env: ClassVar[dict] = {"TAPE_PASSWORD": "sesame", "TAPE_GUEST_PASSWORD": "visitor"}
+    outside: ClassVar[dict] = {"X_Forwarded_For": "203.0.113.9"}   # through a proxy: never placed by address
 
     def sign_in(self, password=b"sesame", **headers):
         status, h, _ = self.server.call("/login", "POST", b"p=" + password, **headers)
@@ -282,13 +282,13 @@ class GuestNeedsOwner(unittest.TestCase):
             for env in ({"TAPE_GUEST_PASSWORD": "x"}, {"TAPE_PASSWORD": "same", "TAPE_GUEST_PASSWORD": "same"}):
                 full = {k: v for k, v in os.environ.items() if not k.startswith("TAPE_")}
                 full.update(TAPE_MUSIC=tmp, TAPE_STATE=tmp + "/state", **env)
-                run = subprocess.run([sys.executable, str(SERVER)], env=full, capture_output=True, timeout=10)
+                run = subprocess.run([sys.executable, str(SERVER)], env=full, capture_output=True, timeout=10, check=False)
                 self.assertEqual(run.returncode, 1, env)
 
 
 class Tailscale(Base):
     """--tailscale: behind Tailscale Serve, a named tailnet user is home; a forged header from outside isn't."""
-    env = {"TAPE_PASSWORD": "sesame", "TAPE_TAILSCALE": "1"}
+    env: ClassVar[dict] = {"TAPE_PASSWORD": "sesame", "TAPE_TAILSCALE": "1"}
 
     def test_named_user_is_home(self):
         user = {"Tailscale_User_Login": "me@example.com", "X_Forwarded_For": "100.64.0.7"}
@@ -298,7 +298,7 @@ class Tailscale(Base):
 
 class AskEveryone(Base):
     """--home-networks none: the password for everyone, home included."""
-    env = {"TAPE_PASSWORD": "sesame", "TAPE_HOME_NETWORKS": "none"}
+    env: ClassVar[dict] = {"TAPE_PASSWORD": "sesame", "TAPE_HOME_NETWORKS": "none"}
 
     def test_asked(self):
         self.assertEqual(self.server.get("/favs")[0], 401)

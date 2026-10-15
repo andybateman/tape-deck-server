@@ -114,7 +114,7 @@ def read_tags(path: Path) -> tuple[str | None, int]:
                 title = str(values[0]).strip() or None
         length = round(f.info.length) if getattr(f, "info", None) and f.info.length else 0
         return title, length
-    except Exception:
+    except Exception:  # noqa: BLE001 - a damaged file can raise anything from mutagen or Pillow
         return None, 0
 
 
@@ -136,7 +136,7 @@ def embedded_art(path: Path) -> bytes | None:
                 return bytes(covr[0])
         if getattr(f, "pictures", None):           # FLAC
             return bytes(f.pictures[0].data)
-    except Exception:
+    except Exception:  # noqa: BLE001, S110 - a damaged file can raise anything; it just has no art
         pass
     return None
 
@@ -149,7 +149,7 @@ def write_thumb(data: bytes, out: Path) -> bool:
         img.save(tmp, "JPEG", quality=80, optimize=True)
         os.replace(tmp, out)
         return True
-    except Exception:
+    except Exception:  # noqa: BLE001 - a damaged file can raise anything from mutagen or Pillow
         return False
 
 
@@ -300,7 +300,7 @@ def rescan_forever(library: Library, minutes: float) -> None:
         time.sleep(minutes * 60)
         try:
             library.scan()
-        except Exception as e:   # a folder gone for a moment (a drive asleep) shouldn't stop the next try
+        except Exception as e:  # noqa: BLE001 - one failed scan must not stop the server   # a folder gone for a moment (a drive asleep) shouldn't stop the next try
             log(f"library: scan failed: {e}")
 
 
@@ -487,7 +487,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         if self.server.verbose:
-            log("%s %s" % (self.client_address[0], fmt % args))
+            log(f"{self.client_address[0]} {fmt % args}")
 
     def handle(self):
         try:
@@ -838,7 +838,7 @@ def main(argv=None) -> int:
     def first_scan():
         try:
             library.scan()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 - one failed scan must not stop the server
             log(f"library: scan failed: {e}")
         if args.rescan > 0:
             rescan_forever(library, args.rescan)

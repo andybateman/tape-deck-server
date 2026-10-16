@@ -1,5 +1,9 @@
 # Changelog - Tape Deck Server
 
+## 2026-10-16: Linked from Tape Deck and its website
+
+- **Where people find it.** Tape Deck v4.21.1 links to this repository from its first screen, under the music server's address, and names it in the in-app help; the website's Tape Deck front page and help link to it too, live the same day. The README's next step says so; what's left is a line in the TestFlight notes.
+
 ## 2026-10-15: Project created, v1.0.0 released
 
 - **What it is** (Andy: "this little Python server that serves as a tiny headless Docker container or app where I can let people serve their own files … so I can stick it on GitHub and release it"). His choices: a server for the app alone, not the web player; its own public repository; Docker and a plain script; MIT.

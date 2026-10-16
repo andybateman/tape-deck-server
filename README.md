@@ -4,7 +4,7 @@
 **Keywords:** Tape Deck app, music server, self-hosted music, Docker image, GHCR, Python HTTP server, byte ranges, owner and guest passwords, favourites sync, album covers, mutagen tags, Pillow thumbnails, Tailscale Serve, Caddy HTTPS, MIT licence, open source release, GitHub Actions, 20261015
 **Status:** Active
 **Start Date:** 2026-10-15
-**Last Updated:** 2026-10-15
+**Last Updated:** 2026-10-16
 **Context:** @personal
 **Repository:** https://github.com/andybateman/tape-deck-server (public)
 -->
@@ -35,7 +35,7 @@ The public README, what people read on GitHub, is [.github/README.md](.github/RE
 
 ## Next Steps
 
-1. Linked from the app's first screen and named in its help (Tape Deck v4.21.1, 2026-10-16), and linked from the website's Tape Deck front page and help once that push goes out. Left: the TestFlight notes.
+1. Linked from the app's first screen and named in its help (Tape Deck v4.21.1, 2026-10-16), and from the website's Tape Deck front page and help (live 2026-10-16). Left: the TestFlight notes, written per build in App Store Connect.
 
 ## Known Issues
 

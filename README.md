@@ -35,7 +35,7 @@ The public README, what people read on GitHub, is [.github/README.md](.github/RE
 
 ## Next Steps
 
-1. Link it from the app's help and the website's Tape Deck pages, and from the TestFlight notes.
+1. Linked from the app's first screen and named in its help (Tape Deck v4.21.1, 2026-10-16), and linked from the website's Tape Deck front page and help once that push goes out. Left: the TestFlight notes.
 
 ## Known Issues
 
